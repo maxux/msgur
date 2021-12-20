@@ -17,23 +17,32 @@
 
 <body>
     <main>
-    <div class="container py-4">
-        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-          <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+    <header class="p-3 bg-dark text-white">
+      <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
             <span class="fs-4">Messenger Secure</span>
           </a>
 
-          <ul class="nav nav-pills">
+          <ul class="nav nav-pills col-12 col-lg-auto my-2 justify-content-center my-md-0">
             <li class="nav-item"><a href="/" class="nav-link{{ ' active' if activepage == 'home' }}">Home</a></li>
             <li class="nav-item"><a href="/about" class="nav-link{{ ' active' if activepage == 'about' }}">About</a></li>
           </ul>
-        </header>
+        </div>
+      </div>
+    </header>
 
+    <div class="container py-4">
         {% block content %}
         {% endblock %}
 
-        <footer class="pt-3 mt-4 text-muted border-top">
-          &copy; 2021 - Maxux Network
+        <footer>
+        <div class="d-flex justify-content-between py-4 my-4 border-top">
+            <p>&copy; 2021 - Maxux Network</p>
+            <ul class="list-unstyled d-flex">
+                <li class="ms-3">Revision: {{ revision }}</li>
+            </ul>
+        </div>
         </footer>
       </div>
     </main>

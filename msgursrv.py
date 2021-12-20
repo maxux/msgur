@@ -6,11 +6,16 @@ import uuid
 import sqlite3
 import json
 import base64
+import git
 from config import config
 from flask import Flask, request, jsonify, render_template, abort
 
 app = Flask(__name__, static_url_path='/static')
 app.url_map.strict_slashes = False
+
+repo = git.Repo(search_parent_directories=True)
+sha = repo.head.object.hexsha
+gitsha = sha[0:8]
 
 @app.route('/fetch/<id>', methods=['GET'])
 def fetch(id):
@@ -57,7 +62,8 @@ def index_hash(hash):
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template("create.html")
+    content = {"revision": gitsha}
+    return render_template("create.html", **content)
 
 print("[+] listening")
 app.run(host=config['listen'], port=config['port'], debug=config['debug'], threaded=True)
