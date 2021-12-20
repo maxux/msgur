@@ -47,10 +47,13 @@ function msgur(send) {
 }
 
 function copyurl() {
-    let text = document.getElementById("url");
-    text.select();
-    text.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(text.value);
+    var input = document.body.appendChild(document.createElement("input"));
+    input.value = $("#url").val();
+    input.focus();
+    input.select();
+
+    document.execCommand('copy');
+    input.parentNode.removeChild(input);
 
     $("#copy-btn").html("Copied !");
 }
