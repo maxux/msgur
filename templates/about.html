@@ -4,4 +4,36 @@
 
 {% block content %}
 <h1 class="border-bottom border-info">About</h1>
+
+<h2 class="py-3">Summary</h2>
+In summary, this web-service provide a way to host a message in a secure way, only
+readable one time, destructed when read. Message are encrypted and no-one except the
+first one with the url can read it.
+
+<h2 class="py-3">Technical details</h2>
+Message are encrypted using AES algorythm. The cipher key is never sent to the server (client-side generated)
+and the client generate the url. The server doesn't know the key and never receive it.
+
+Workflow:
+<ul>
+<li>The user write his message, then clic on "Encrypt and Send" button</li>
+<li>A key (uuid4) is generated, client-side (in the browser)</li>
+<li>The message is encrypted using that key (client-side in the browser)</li>
+<li>The encrypted message (and nothing else) is sent to the server to store it</li>
+<li>The server reply with a unique id matching with the message</li>
+<li>The reader URL is generated (client-side in the browser) using the returned id and the key</li>
+</ul>
+
+You need to know the <code>id</code> and the <code>key</code> to get the message and decrypt it.<br>
+The server doesn't know the key, it's not possible for anyone who have access to the server to decrypt
+a message without the key, even the administrator. The key is only available to the creator, on his browser.
+<br>
+When a request to the message is made, the message is deleted from the database, permanently.
+
+<h2 class="py-3">How can I ensure you're not cheating ?</h2>
+Just use your browser inspector, you can check network activity and you'll see that the key
+is never sent to the server.
+
+<h2 class="py-3">Source code</h2>
+Code is open source and can be found on github: <a href="https://github.com/maxux/msgur">maxux/msgur</a>.
 {% endblock %}
