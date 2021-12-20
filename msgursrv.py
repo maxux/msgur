@@ -21,12 +21,13 @@ def fetch(id):
     c.execute('SELECT message FROM messages WHERE id = ?', fields)
     data = c.fetchone()
 
+    if data is None:
+        db.close()
+        return abort(404)
+
     c.execute('DELETE FROM messages WHERE id = ?', fields)
     db.commit()
     db.close()
-
-    if data is None:
-        return abort(404)
 
     return jsonify({"message": data[0]})
 
