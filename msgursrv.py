@@ -43,6 +43,10 @@ def create():
 
     return jsonify({"id": mid})
 
+@app.route('/about', methods=['GET'])
+def about():
+    return render_template("about.html")
+
 @app.route('/<hash>', methods=['GET'])
 def index_hash(hash):
     return render_template("fetch.html")
