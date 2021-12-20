@@ -20,6 +20,9 @@ def fetch(id):
     fields = (id,)
     c.execute('SELECT message FROM messages WHERE id = ?', fields)
     data = c.fetchone()
+
+    c.execute('DELETE FROM messages WHERE id = ?', fields)
+    db.commit()
     db.close()
 
     if data is None:
