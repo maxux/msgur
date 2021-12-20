@@ -21,6 +21,7 @@ function msgur(send) {
 
     if(send == true) {
         $("#creator").hide();
+        $("#url-box").removeClass("d-none").show();
     }
 
     $("#key").html("Key: " + data.key);
@@ -40,9 +41,18 @@ function msgur(send) {
 
         }).done(function(data) {
             let id = data.id;
-            $("#url").html("URL: " + hosturl + id + "#" + this.key);
+            $("#url").val(hosturl + id + "#" + this.key);
         });
     }
+}
+
+function copyurl() {
+    let text = document.getElementById("url");
+    text.select();
+    text.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(text.value);
+
+    $("#copy-btn").html("Copied !");
 }
 
 function fetch(context) {

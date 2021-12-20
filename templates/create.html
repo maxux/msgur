@@ -18,16 +18,23 @@ is never sent to the server. More information in <a href="/about">about</a> page
         <button type="button" class="btn btn-secondary" onclick="msgur(false);">Encrypt Only</button>
     </div>
 </div>
+
 <br>
+
+<div class="h-100 p-4 rounded-3 m-4 d-none" id="url-box">
+<div class="input-group mb-3">
+    <span class="input-group-text" id="addon-wrapping">URL</span>
+    <input type="text" class="form-control" disabled id="url">
+    <button id="copy-btn" class="btn btn-success" type="button" onclick="copyurl();">Copy</button>
+</div>
+</div>
+
 <div class="h-100 p-4 text-white bg-dark rounded-3 d-none" id="summary">
     <div>
         <code id="key">Key: </code>
     </div>
     <div>
         <code id="encrypted">Encrypted: </code>
-    </div>
-    <div>
-        <code id="url">URL: (not generated)</code>
     </div>
 </div>
 {% endblock %}
