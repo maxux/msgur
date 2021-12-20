@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block title %}Messenger Secure - Fetch{% endblock %}
+
+{% block content %}
+<h1>Self-destructed message:</h1>
+<div class="alert alert-danger d-none" id="error"></div>
+
+<div class="h-100 p-4 text-white bg-dark rounded-3" id="msgroot">
+    <code id="decrypt"></code>
+</div>
+
+<br>
+<div class="alert alert-success d-none" id="success"></div>
+
+<div class="h-100 p-3 bg-dark rounded-3">
+    <code id="mid" class="text-white">Loading</code>
+    <br>
+    <code id="key" class="text-white"></code>
+</div>
+{% endblock %}

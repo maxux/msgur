@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gxD6x9bgukFGl3FYOQ3fLMFdmaQyYtMdUGt72V5C0CqJXLCN+SitZWeABn2B7ir7" crossorigin="anonymous">
+    <link href="/static/css/msgur.css" rel="stylesheet">
+
+    <script src="/static/js/crypto-js.min.js"></script>
+    <script src="/static/js/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/msgur.js"></script>
+</head>
+
+<body>
+    <main>
+    <div class="container py-4">
+        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+          <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+            <span class="fs-4">Messenger Secure</span>
+          </a>
+
+          <ul class="nav nav-pills">
+            <li class="nav-item"><a href="/" class="nav-link active" aria-current="page">Home</a></li>
+            <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+          </ul>
+        </header>
+
+        {% block content %}
+        {% endblock %}
+
+        <footer class="pt-3 mt-4 text-muted border-top">
+          &copy; 2021 - Maxux Network
+        </footer>
+      </div>
+    </main>
+</body>
+</html>
+
