@@ -3,3 +3,7 @@ textarea {
     height: 200px;
     font-family: Consolas, Lucida Console, monospace;
 }
+
+pre {
+    white-space: pre-wrap;
+}

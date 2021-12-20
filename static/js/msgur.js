@@ -25,14 +25,18 @@ function msgur(send) {
     }
 
     $("#key").html("Key: " + data.key);
-    $("#encrypted").html("Encrypted: " + data.encrypted);
+
+    if(send) {
+        $("#encrypted").html("Encrypted: " + data.encrypted.substr(0, 250) + " [truncated]");
+    } else {
+        $("#encrypted").html("Encrypted: " + data.encrypted);
+    }
 
     let payload = {
         message: data.encrypted
     };
 
     if(send == true) {
-        console.log(data);
         $.ajax("/create", {
             data: JSON.stringify(payload),
             contentType: 'application/json',
