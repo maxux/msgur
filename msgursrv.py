@@ -45,13 +45,11 @@ def create():
 
 @app.route('/<hash>', methods=['GET'])
 def index_hash(hash):
-    content = {}
-    return render_template("fetch.html", **content)
+    return render_template("fetch.html")
 
 @app.route('/', methods=['GET'])
 def index():
-    content = {}
-    return render_template("create.html", **content)
+    return render_template("create.html")
 
 print("[+] listening")
 app.run(host=config['listen'], port=config['port'], debug=config['debug'], threaded=True)
