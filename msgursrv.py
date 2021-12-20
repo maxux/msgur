@@ -54,11 +54,13 @@ def create():
 
 @app.route('/about', methods=['GET'])
 def about():
-    return render_template("about.html")
+    content = {"revision": gitsha}
+    return render_template("about.html", **content)
 
 @app.route('/<hash>', methods=['GET'])
 def index_hash(hash):
-    return render_template("fetch.html")
+    content = {"revision": gitsha}
+    return render_template("fetch.html", **content)
 
 @app.route('/', methods=['GET'])
 def index():
