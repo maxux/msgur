@@ -72,7 +72,7 @@ function loader() {
         key: $(location).attr('hash').substr(1),
     };
 
-    if(context.id == '') {
+    if(context.id == '' || context.key == '') {
         $("#message").focus();
         return;
     }
