@@ -7,6 +7,7 @@ import sqlite3
 import json
 import base64
 import git
+import hashlib
 from config import config
 from flask import Flask, request, jsonify, render_template, abort
 
@@ -16,6 +17,20 @@ app.url_map.strict_slashes = False
 repo = git.Repo(search_parent_directories=True)
 sha = repo.head.object.hexsha
 gitsha = sha[0:8]
+
+def idgen():
+    uid = uuid.uuid4().bytes
+
+    h = hashlib.blake2b(digest_size=9)
+    h.update(uid)
+
+    digest = h.digest()
+
+    # use base64 url safe
+    encoded = base64.b64encode(digest, altchars=b'-_')
+
+    return encoded.decode('utf-8')
+
 
 @app.route('/fetch/<id>', methods=['GET'])
 def fetch(id):
@@ -40,7 +55,7 @@ def fetch(id):
 def create():
     db = sqlite3.connect("db/msgur.sqlite3")
 
-    mid = str(uuid.uuid4())
+    mid = idgen()
     payload = request.get_json()
     message = payload["message"]
 

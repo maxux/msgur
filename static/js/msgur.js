@@ -1,7 +1,8 @@
 let hosturl = location.protocol + "//" + location.host + "/";
 
 function create(message) {
-    let key = uuid.v4();
+    var uid = uuid.v4();
+    let key = uid.replaceAll("-", "").substr(0, 16);
     let cipher = CryptoJS.AES.encrypt(message, key);
     let encrypted = cipher.toString();
 
