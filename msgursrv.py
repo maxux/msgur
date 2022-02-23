@@ -37,6 +37,11 @@ def fetch(id):
     db = sqlite3.connect("db/msgur.sqlite3")
 
     c = db.cursor()
+
+    # ensure data are overwritten when deleting entry
+    c.execute("PRAGMA secure_delete = ON")
+    c.fetchone()
+
     fields = (id,)
     c.execute('SELECT message FROM messages WHERE id = ?', fields)
     data = c.fetchone()
