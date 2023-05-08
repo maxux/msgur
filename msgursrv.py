@@ -87,6 +87,10 @@ def index():
     content = {"revision": gitsha}
     return render_template("create.html", **content)
 
-print("[+] listening")
-app.run(host=config['listen'], port=config['port'], debug=config['debug'], threaded=True)
+def production():
+    return app
+
+if __name__ == "__main__":
+    print("[+] listening in debug mode")
+    app.run(host=config['listen'], port=config['port'], debug=config['debug'], threaded=True)
 
