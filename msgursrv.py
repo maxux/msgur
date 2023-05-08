@@ -8,8 +8,9 @@ import json
 import base64
 import git
 import hashlib
-from config import config
+from datetime import datetime
 from flask import Flask, request, jsonify, render_template, abort
+from config import config
 
 app = Flask(__name__, static_url_path='/static')
 app.url_map.strict_slashes = False
@@ -31,6 +32,10 @@ def idgen():
 
     return encoded.decode('utf-8')
 
+
+@app.context_processor
+def inject_now():
+    return {'now': datetime.utcnow()}
 
 @app.route('/fetch/<id>', methods=['GET'])
 def fetch(id):
