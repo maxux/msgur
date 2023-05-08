@@ -15,3 +15,7 @@ textarea {
 pre {
     white-space: pre-wrap;
 }
+
+.nav-item a {
+    color: #ffffff;
+}
