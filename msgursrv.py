@@ -9,7 +9,6 @@ import base64
 import hashlib
 from datetime import datetime
 from flask import Flask, request, jsonify, render_template, abort
-from config import config
 
 class Msgur:
     def __init__(self):
@@ -112,8 +111,10 @@ class Msgur:
             content = {"revision": self.gitsha}
             return render_template("create.html", **content)
 
-def gunicorn_main():
+if __name__ == "msgursrv":
+    print("[+] wsgi: initializing msgur application")
+
     root = Msgur()
     root.routes()
-    return root.app
+    app = root.app
 
