@@ -78,7 +78,7 @@ function fetch(context) {
 
     }).done(function(data) {
         let message = decode(data.message, this.key);
-        $("#decrypt").html(message);
+        $("#decrypt").text(message);
         $("#success").removeClass("d-none").html("Message retreived and destructed");
     });
 
