@@ -1,21 +1,37 @@
 {% extends "layout.html" %}
 {% set activepage = "home" %}
-{% block title %}Messenger Secure - Fetch{% endblock %}
+{% block title %}Secure Messenger &bull; Read a message{% endblock %}
 
 {% block content %}
-<h1 class="border-bottom border-warning">Self-destructed message</h1>
-<div class="alert alert-danger d-none" id="error"></div>
+<div class="alert alert-danger text-bg-danger fw-bold d-none" id="error"></div>
 
-<div class="h-100 p-4 text-white bg-dark rounded-3" id="msgroot">
-    <pre id="decrypt"></pre>
+<p class="text-end mb-3">
+  <a href="/" class="btn btn-info">Write a new message</a>
+</p>
+
+<div id="fetch-ready" class="d-none">
+  <div class="mb-5 p-3 text-white bg-black bg-opacity-50 rounded-3">
+    <pre id="plaintext-area" class="m-0"></pre>
+  </div>
+
+  <div class="alert p-2 fw-bold text-bg-green flex-grow-1 d-none" id="success"></div>
+
+  <div class="d-flex align-items-center justify-content-evenly flex-column flex-md-row fs-6x gap-3">
+    <div class="render-half-badge">
+      <span class="badge badge-left bg-blue-800">ID</span>
+      <span class="badge badge-right bg-grayx-700" id="fetch-id">...</span>
+    </div>
+
+    <div class="render-half-badge">
+      <span class="badge badge-left bg-pink-700">Key</span>
+      <span class="badge badge-right bg-grayx-700" id="fetch-key">...</span>
+    </div>
+
+    <div class="render-half-badge">
+      <span class="badge badge-left bg-purple-600">IV</span>
+      <span class="badge badge-right bg-grayx-700" id="fetch-iv">...</span>
+    </div>
+  </div>
 </div>
 
-<br>
-<div class="alert alert-success d-none" id="success"></div>
-
-<div class="h-100 p-3 bg-dark rounded-3">
-    <code id="mid" class="text-white">Loading</code>
-    <br>
-    <code id="key" class="text-white"></code>
-</div>
 {% endblock %}

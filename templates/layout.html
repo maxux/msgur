@@ -1,56 +1,59 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 
-    <title>{% block title %}{% endblock %}</title>
+  <title>{% block title %}{% endblock %}</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gxD6x9bgukFGl3FYOQ3fLMFdmaQyYtMdUGt72V5C0CqJXLCN+SitZWeABn2B7ir7" crossorigin="anonymous">
-    <link href="/static/css/msgur.css" rel="stylesheet">
-
-    <script src="/static/js/crypto-js.min.js"></script>
-    <script src="/static/js/jquery-3.6.0.min.js"></script>
-    <script src="/static/js/uuid.min.js"></script>
-    <script src="/static/js/msgur.js"></script>
+  <!-- Not minified for now, easier to audit -->
+  <link href="/static/css/bootstrap.css" rel="stylesheet">
+  <script src="/static/js/msgur.js"></script>
 </head>
 
-<body>
-    <main>
-    <header class="p-3 bg-dark text-white">
-      <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-          <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-            <span class="fs-4">Messenger Secure</span>
-          </a>
-
-          <ul class="nav nav-pills col-12 col-lg-auto my-2 justify-content-center my-md-0">
-            <li class="nav-item"><a href="/" class="nav-link{{ ' active' if activepage == 'home' }}">Home</a></li>
-            <li class="nav-item"><a href="/about" class="nav-link{{ ' active' if activepage == 'about' }}">About</a></li>
-          </ul>
-        </div>
+<body data-bs-theme="dark">
+  <!-- Placeholder for a modal if browser doesn't support cryptograph -->
+  <div class="modal fade" id="modal-no-crypto" tabindex="-1" aria-labelledby="no-cypto-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-bg-danger">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="no-crypto-title">Cryptography unavailable</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-    </header>
+      <div class="modal-body text-bg-dark">
+        It seems that your browser doesn't supports cryptography features. This service requires them.
+      </div>
+    </div>
+    </div>
+  </div>
 
+  <main class="container-fluid bg-dark d-flex flex-column justify-content-between">
     <div class="container py-4">
-        {% block content %}
-        {% endblock %}
+    {% block content %}
+    {% endblock %}
+    </div>
+  </main>
 
-        <footer>
-        <div class="d-flex justify-content-between py-4 my-4 border-top">
-            <p>&copy; {{ now.year }} - Maxux Network</p>
-            <ul class="list-unstyled d-flex">
-                <li class="ms-3">Revision: <code>{{ revision }}</code></li>
-            </ul>
-        </div>
-        </footer>
+  <footer class="border-top d-flex justify-content-center align-items-center">
+    <div class="container my-3">
+      <div class="d-flex justify-content-center justify-content-md-between align-items-center flex-column flex-md-row gap-3">
+        <div class="text-center text-md-start small text-grayx-500 position-relative">
+        <div class="fw-bold">Msgur (Messengur, Secure Messaging)</div>
+        <div>&copy; {{ now.year }} - Maxux Network</div>
+        <a href="/" class="stretched-link"></a>
       </div>
-    </main>
+
+      <div class="render-half-badge fs-6x position-relative">
+        <span class="badge badge-left bg-pink-800">Revision</span>
+        <span class="badge badge-right bg-grayx-700">{{ revision }}</span>
+        <a href="https://github.com/maxux/msgur" target="_blank" class="stretched-link"></a>
+      </div>
+    </div>
+    </div>
+  </footer>
+
+  <!-- Last hard external dependency so far, used for Modal and others features -->
+  <script src="/static/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
