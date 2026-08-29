@@ -3,40 +3,54 @@
 {% block title %}Messenger Secure - About{% endblock %}
 
 {% block content %}
-<h1 class="border-bottom border-info">About</h1>
+<div class="alert alert-dark text-bg-purple fw-bold">
+  Welcome on Msgur Quick Notes !
+</div>
 
 <h2 class="py-3">Summary</h2>
-Msgur (pronounced « messenger ») is a web-service providing a way to host a message in a secure way,
-only readable a single time, permanently destructed on read. Messages are encrypted and no-one except the
-first one with the url can read it.
+Msgur (pronounced « Messenger ») is a web service offering a way to share a message in a secure way,
+only readable a single time (permanently destroyed after read). Messages are encrypted before leaving the
+sender and uncrypted by receiver at the very last end.
 
 <h2 class="py-3">Technical details</h2>
-Message are encrypted using AES algorythm. The cipher key is never sent to the server (client-side generated)
-and the client generate the url. The server doesn't know the key and never receive it.
+Message is encrypted using Symmetric AES-GCM Algorithm (a trade-off needed for practicity). Encrypted message is sent to
+the server, with the initializaton vector but not the key; that encryption key is inserted by the sender, in the final generated URL.
+To prevent the browser to transmit the encryption key when part of the URL, resource locator is assembled with fragment,
+using a hash (<code>#</code>) which is not sent as part of the query to the server.
 
-Workflow:
+In a nutshell (eveything happens in a browser):
 <ul>
-<li>The user write his message, then clic on "Encrypt and Send" button</li>
-<li>A key (uuid4 derivated) is generated, client-side (in the browser)</li>
-<li>The message is encrypted using that key (client-side in the browser)</li>
-<li>The encrypted message (and nothing else) is sent to the server to store it</li>
-<li>The server reply with a unique id matching with the message</li>
-<li>The reader URL is generated (client-side in the browser) using the returned id and the key</li>
+<li>Sender write a message, then click « Encrypt and Send ».</li>
+<li>For each message, a new 128-bits encryption key (and initialization vector) is computed.</li>
+<li>Message is encrypted in the browser with the fresh generated key.</li>
+<li>The ciphertext (encrypted message) is transmitted to the server (with the iv).</li>
+<li>The server generate a unique random identifier which is stored in a database next to the encrypted message.</li>
+<li>The server send that unique identifier back to the sender.</li>
+<li>The sender craft a reader URL including all needed data needed to decrypt the ciphertext on it's own.</li>
+<li>The sender send that URL to whichever recipient, using the channel he prefers.</li>
 </ul>
 
-You need to know the <code>id</code> and the <code>key</code> to get the message and decrypt it.<br>
-The server doesn't know the key, it's not possible for anyone who have access to the server to decrypt
-a message without the key, even the administrator. The key is only available to the creator, on his browser.
-<br>
-When a request to the message is made, the message is deleted from the database, permanently.
+You need to know the <code>ID</code> and the <code>Key</code> to be able to retreive the message and decrypt it.<br>
+The server doesn't have the key, making encrypted message unreadable server side.<br><br>
+As soon as server receive the recipient request, the message is forwarded the client and then cipher <strong>is permanently erased</strong>.
+Because the message is destroyed on first read, if you can get the message, that means
+no one have seen it before. If the message doesn't exists when you try to read it, that could mean someone is hijacking
+the message in between.<br><br>
+The message request is operated via JavaScript, client side, to prevent any intermediate service trying to
+load the page to build a preview and... destroy the message prematurely.
 
-<h2 class="py-3">How can I ensure you're not cheating ?</h2>
-Just use your browser inspector, you can check network activity and you'll see that the key
-is never sent to the server.
+<div class="alert alert-dark text-bg-green my-3">
+  <h2>Source code</h2>
+  <p>
+    You don't trust this server ? You don't trust me ? You want to keep control of your data ? That's really nice !
+    The full client and server code of this project is free and open source, feel free to host, hack it, modify it, improve it,
+    audit it, run it yourself and trust no one else !
+  </p>
 
-<h2 class="py-3">Source code</h2>
-Code is open source and can be found on github: <a href="https://github.com/maxux/msgur" target="_blank">maxux/msgur</a>
+    <a href="https://github.com/maxux/msgur" class="btn btn-dark" target="_blank">Take a look to: maxux/msgur</a>
+</div>
 
-<h2 class="py-3">Cookies</h3>
-There are no cookies used at all.
+<h2 class="py-3">Cookies Policy</h2>
+Not a single cookie are involved at all here.
+
 {% endblock %}
