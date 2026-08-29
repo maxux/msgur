@@ -1,11 +1,11 @@
 # Messenger Secure (msgur)
 
-In summary, this web-service provide a way to host a message in a secure way, only
-readable one time, destructed when read. Message are encrypted and no-one except the
+In summary, this web service provide a way to host a message in a secure way, only
+readable one time, destroyed on read. Message are encrypted and no-one except the
 first one with the url can read it.
 
 # Technical details
-Message are encrypted using AES algorythm. The cipher key is never sent to the server (client-side generated)
+Message are encrypted using AES algorythm. The encryption key is never sent to the server (client-side generated)
 and the client generate the url. The server doesn't know the key and never receive it.
 
 Workflow:
@@ -22,3 +22,5 @@ The server doesn't know the key, it's not possible for anyone who have access to
 a message without the key, even the administrator. The key is only available to the creator, on his browser.
 
 When a request to the message is made, the message is deleted from the database, permanently.
+
+This documents will receive some updates the next few days related to implementation changes.
