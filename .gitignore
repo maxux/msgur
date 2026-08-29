@@ -1,3 +1,4 @@
 db/msgur.sqlite3
 __pycache__
 .runtime
+config.py
