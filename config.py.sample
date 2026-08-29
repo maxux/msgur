@@ -1,0 +1,17 @@
+class Database:
+    # mariadb credentials
+    hostname = ""
+    socket = None
+    username = ""
+    password = ""
+    database = "msgur"
+
+class Config:
+    db = Database()
+
+    # Enable Jinja auto reload
+    debug = True
+
+    # Fetch repository git revision to show it
+    # on runtine on page's footer
+    revision = True
