@@ -3,118 +3,167 @@ import sys
 import time
 import datetime
 import uuid
-import sqlite3
 import json
-import base64
 import hashlib
+import MySQLdb
+import MySQLdb.cursors
+from config import Config as config
 from datetime import datetime
-from flask import Flask, request, jsonify, render_template, abort
+from flask import Flask, request, jsonify, render_template, abort, g
 
-class Msgur:
+class MsgURWebServer:
     def __init__(self):
+        self.config = config
+
         self.app = Flask(__name__, static_url_path='/static')
         self.app.url_map.strict_slashes = False
 
-        self.gitsha = self.gitsharoot()
-        print(f"[+] running code revision: {self.gitsha}")
+        if self.config.debug:
+            self.app.config['TEMPLATES_AUTO_RELOAD'] = True
 
-    def gitsharoot(self):
+        self.gitrev = None
+
+        if config.revision:
+            self.gitrev = self.repository_revision()
+            print(f"[+] repository revision: {self.gitrev}")
+
+    def database(self):
+        db = MySQLdb.connect(
+            host=config.db.hostname,
+            user=config.db.username,
+            password=config.db.password,
+            database=config.db.database,
+            autocommit=True,
+            cursorclass=MySQLdb.cursors.DictCursor
+        )
+
+        return db
+
+    def repository_sha(self):
+        with open(".git/HEAD", "r") as f:
+            head = f.read()
+            if not head.startswith("ref:"):
+                return None
+
+            ref = head[5:].strip()
+
+        with open(f".git/{ref}", "r") as f:
+            sha = f.read()
+            return sha[:12]
+
+        return None
+
+    def repository_revision(self):
         try:
-            ref = ""
-
-            with open(".git/HEAD", "r") as f:
-                head = f.read()
-                if not head.startswith("ref:"):
-                    return None
-
-                ref = head[5:].strip()
-
-            with open(f".git/{ref}", "r") as f:
-                sha = f.read()
-                return sha[:8]
+            self.gitrev = self.repository_sha()
+            return self.gitrev
 
         except Exception as e:
             print(e)
             return None
 
-    def idgen(self):
+    def identifier_generate(self):
         uid = uuid.uuid4().bytes
 
-        h = hashlib.blake2b(digest_size=9)
+        h = hashlib.blake2b(digest_size=6)
         h.update(uid)
-
         digest = h.digest()
 
-        # use base64 url safe
-        encoded = base64.b64encode(digest, altchars=b'-_')
-
-        return encoded.decode('utf-8')
+        return digest.hex()
 
 
     def routes(self):
         @self.app.context_processor
         def inject_now():
-            return {'now': datetime.utcnow()}
+            return {
+                "now": datetime.utcnow(),
+                "revision": self.gitrev,
+            }
 
-        @self.app.route('/fetch/<id>', methods=['GET'])
+        @self.app.before_request
+        def before_request_handler():
+            # shortcut static files
+            if request.path.startswith("/static"):
+                return None
+
+            g.db = self.database()
+            return None
+
+        @self.app.after_request
+        def after_request_handler(response):
+            # shortcut static files
+            if request.path.startswith("/static"):
+                return response
+
+            if "db" in g:
+                g.db.close()
+
+            response.headers["Access-Control-Allow-Origin"] = "*"
+            return response
+
+        @self.app.get('/api/fetch/<id>')
         def fetch(id):
-            db = sqlite3.connect("db/msgur.sqlite3")
+            cursor = g.db.cursor()
+            cursor.execute("""
+               SELECT ciphertext, UNIX_TIMESTAMP(created) created, iv
+                FROM messages WHERE id = %(id)s
+                  AND seen IS NULL
 
-            c = db.cursor()
+            """, {"id": id})
 
-            # ensure data are overwritten when deleting entry
-            c.execute("PRAGMA secure_delete = ON")
-            c.fetchone()
+            row = cursor.fetchone()
+            if row is None:
+                abort(404)
 
-            fields = (id,)
-            c.execute('SELECT message FROM messages WHERE id = ?', fields)
-            data = c.fetchone()
+            cursor.execute("""
+                UPDATE messages SET ciphertext = NULL, seen = CURRENT_TIMESTAMP
+                WHERE id = %(id)s
+                AND seen IS NULL
 
-            if data is None:
-                db.close()
-                return abort(404)
+            """, {"id": id})
 
-            c.execute('DELETE FROM messages WHERE id = ?', fields)
-            db.commit()
-            db.close()
+            # FIXME
+            # cursor.execute("DELETE FROM messages WHERE id = %(id)s", {"id": id})
 
-            return jsonify({"message": data[0]})
+            return jsonify(row)
 
-        @self.app.route('/create', methods=['POST'])
+        @self.app.post('/api/create')
         def create():
-            db = sqlite3.connect("db/msgur.sqlite3")
+            cursor = g.db.cursor()
+            payload = request.json
 
-            mid = self.idgen()
-            payload = request.get_json()
-            message = payload["message"]
+            data = {
+                "id": self.identifier_generate(),
+                "data": payload.get("message"),
+                "iv": payload.get("iv")
+            }
 
-            c = db.cursor()
-            fields = (mid, message,)
-            c.execute('INSERT INTO messages (id, message) VALUES (?, ?)', fields)
-            db.commit()
-            db.close()
+            cursor.execute("""
+                INSERT INTO messages (id, ciphertext, iv)
+                VALUES (%(id)s, %(data)s, %(iv)s)
 
-            return jsonify({"id": mid})
+            """, data)
 
-        @self.app.route('/about', methods=['GET'])
+            return jsonify({"id": data["id"]})
+
+        #
+        # Static Templates
+        #
+        @self.app.get('/about')
         def about():
-            content = {"revision": self.gitsha}
-            return render_template("about.html", **content)
+            return render_template("about.html")
 
-        @self.app.route('/<hash>', methods=['GET'])
+        @self.app.get('/<hash>')
         def index_hash(hash):
-            content = {"revision": self.gitsha}
-            return render_template("fetch.html", **content)
+            return render_template("fetch.html")
 
-        @self.app.route('/', methods=['GET'])
+        @self.app.get('/')
         def index():
-            content = {"revision": self.gitsha}
-            return render_template("create.html", **content)
+            return render_template("create.html")
 
 if __name__ == "msgursrv":
     print("[+] wsgi: initializing msgur application")
 
-    root = Msgur()
+    root = MsgURWebServer()
     root.routes()
     app = root.app
-
