@@ -30,6 +30,7 @@ class MsgURWebServer:
     def database(self):
         db = MySQLdb.connect(
             host=config.db.hostname,
+            unix_socket=config.db.socket,
             user=config.db.username,
             password=config.db.password,
             database=config.db.database,
