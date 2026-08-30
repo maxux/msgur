@@ -140,7 +140,7 @@ class SecureMessenger {
             iv: iv,
         };
 
-        const req = new Request("/create", {
+        const req = new Request("/api/create", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(payload),
@@ -242,7 +242,7 @@ class SecureMessenger {
         document.getElementById("fetch-key").innerText = kntxt.key;
 
         // Prepare the remote HTTP request
-        const req = new Request(`/fetch/${kntxt.id}`);
+        const req = new Request(`/api/fetch/${kntxt.id}`);
 
         // Request message data from the server
         const response = await window.fetch(req);
