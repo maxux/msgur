@@ -24,3 +24,20 @@ a message without the key, even the administrator. The key is only available to 
 When a request to the message is made, the message is deleted from the database, permanently.
 
 This documents will receive some updates the next few days related to implementation changes.
+
+# Database Schema
+
+```sql
+-- Table Structure
+CREATE TABLE messages (
+  id varchar(12) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL,
+  ciphertext text CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
+  created timestamp NOT NULL DEFAULT current_timestamp(),
+  seen timestamp NULL DEFAULT NULL,
+  iv varchar(24) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- Indexes
+ALTER TABLE messages ADD PRIMARY KEY (id), ADD KEY seen (seen);
+```
