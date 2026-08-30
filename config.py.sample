@@ -1,7 +1,7 @@
 class Database:
     # mariadb credentials
     hostname = ""
-    socket = None
+    socket = ""
     username = ""
     password = ""
     database = "msgur"
