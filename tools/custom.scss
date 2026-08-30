@@ -1,0 +1,319 @@
+//
+// Maxux Msgur CSS
+//
+
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../bootstrap/scss/functions";
+
+//
+// Custom Fonts
+//
+@font-face {
+    font-family: "UbuntuSans";
+    src: url("../fonts/ubuntu-sans-variable.woff2") format("woff2 supports variations"),
+         url("../fonts/ubuntu-sans-variable.woff2") format("woff2-variations");
+    font-weight: 100 950;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "UbuntuSansMono";
+    src: url("../fonts/ubuntu-sans-mono-variable.woff2") format("woff2 supports variations"),
+         url("../fonts/ubuntu-sans-mono-variable.woff2") format("woff2-variations");
+    font-weight: 100 950;
+    font-style: normal;
+}
+
+// 2. Include any default variable overrides here
+$enable-deprecation-messages: false;
+$enable-rfs: false;
+$enable-rounded: true;
+
+// 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
+@import "../bootstrap/scss/variables";
+@import "../bootstrap/scss/variables-dark";
+
+$font-family-monospace: "UbuntuSansMono", monospace;
+$font-family-base: "UbuntuSans";
+$body-font-weight: 500;
+
+$black-950: tint-color($black, 5%);
+// $body-bg-dark: $black-950;
+
+$modal-backdrop-opacity: 0.8;
+
+$h6x-font-size: $font-size-base * 1.10;
+$font-sizes: map-merge($font-sizes, ("6x": $h6x-font-size));
+
+$toast-max-width: 500px;
+
+$gray-950: mix($gray-800, $black);
+$grayx: (
+  "grayx-100": $gray-100,
+  "grayx-200": $gray-200,
+  "grayx-300": $gray-300,
+  "grayx-400": $gray-400,
+  "grayx-500": $gray-500,
+  "grayx-600": $gray-600,
+  "grayx-700": $gray-700,
+  "grayx-800": $gray-800,
+  "grayx-900": $gray-900,
+  "grayx-950": $gray-950
+);
+
+$all-colors: map-merge-multiple($blues, $indigos, $purples, $pinks, $reds, $oranges, $yellows, $greens, $teals, $cyans, $grayx);
+
+$colors-extended: (
+  "gray": $gray-300
+);
+
+$colors: map-merge($colors, $colors-extended);
+$theme-colors: map-merge($theme-colors, $colors);
+
+// 5. Include remainder of required parts
+@import "../bootstrap/scss/maps";
+@import "../bootstrap/scss/mixins";
+@import "../bootstrap/scss/utilities";
+
+///////////
+
+$blue-text-emphasis:   shade-color($blue, 60%);
+$blue-bg-subtle:       tint-color($blue, 80%);
+$blue-border-subtle:   tint-color($blue, 60%);
+
+$indigo-text-emphasis:   shade-color($indigo, 60%);
+$indigo-bg-subtle:       tint-color($indigo, 80%);
+$indigo-border-subtle:   tint-color($indigo, 60%);
+
+$purple-text-emphasis:   shade-color($purple, 60%);
+$purple-bg-subtle:       tint-color($purple, 80%);
+$purple-border-subtle:   tint-color($purple, 60%);
+
+$pink-text-emphasis:   shade-color($pink, 60%);
+$pink-bg-subtle:       tint-color($pink, 80%);
+$pink-border-subtle:   tint-color($pink, 60%);
+
+$red-text-emphasis:   shade-color($red, 60%);
+$red-bg-subtle:       tint-color($red, 80%);
+$red-border-subtle:   tint-color($red, 60%);
+
+$orange-text-emphasis:   shade-color($orange, 60%);
+$orange-bg-subtle:       tint-color($orange, 80%);
+$orange-border-subtle:   tint-color($orange, 60%);
+
+$yellow-text-emphasis:   shade-color($yellow, 60%);
+$yellow-bg-subtle:       tint-color($yellow, 80%);
+$yellow-border-subtle:   tint-color($yellow, 60%);
+
+$green-text-emphasis:   shade-color($green, 60%);
+$green-bg-subtle:       tint-color($green, 80%);
+$green-border-subtle:   tint-color($green, 60%);
+
+$teal-text-emphasis:   shade-color($teal, 60%);
+$teal-bg-subtle:       tint-color($teal, 80%);
+$teal-border-subtle:   tint-color($teal, 60%);
+
+$cyan-text-emphasis:   shade-color($cyan, 60%);
+$cyan-bg-subtle:       tint-color($cyan, 80%);
+$cyan-border-subtle:   tint-color($cyan, 60%);
+
+$black-text-emphasis:   shade-color($black, 60%);
+$black-bg-subtle:       tint-color($black, 80%);
+$black-border-subtle:   tint-color($black, 60%);
+
+$white-text-emphasis:   shade-color($white, 60%);
+$white-bg-subtle:       tint-color($white, 80%);
+$white-border-subtle:   tint-color($white, 60%);
+
+$extra-colors-text: (
+  "blue": $blue-text-emphasis,
+  "indigo": $indigo-text-emphasis,
+  "purple": $purple-text-emphasis,
+  "pink": $pink-text-emphasis,
+  "red": $red-text-emphasis,
+  "orange": $orange-text-emphasis,
+  "yellow": $yellow-text-emphasis,
+  "green": $green-text-emphasis,
+  "teal": $teal-text-emphasis,
+  "cyan": $cyan-text-emphasis,
+  "black": $black-text-emphasis,
+  "white": $white-text-emphasis,
+);
+
+$extra-colors-bg-subtle: (
+  "blue": $blue-bg-subtle,
+  "indigo": $indigo-bg-subtle,
+  "purple": $purple-bg-subtle,
+  "pink": $pink-bg-subtle,
+  "red": $red-bg-subtle,
+  "orange": $orange-bg-subtle,
+  "yellow": $yellow-bg-subtle,
+  "green": $green-bg-subtle,
+  "teal": $teal-bg-subtle,
+  "cyan": $cyan-bg-subtle,
+  "black": $black-bg-subtle,
+  "white": $white-bg-subtle,
+);
+
+$extra-colors-border-subtle: (
+  "blue": $blue-border-subtle,
+  "indigo": $indigo-border-subtle,
+  "purple": $purple-border-subtle,
+  "pink": $pink-border-subtle,
+  "red": $red-border-subtle,
+  "orange": $orange-border-subtle,
+  "yellow": $yellow-border-subtle,
+  "green": $green-border-subtle,
+  "teal": $teal-border-subtle,
+  "cyan": $cyan-border-subtle,
+  "black": $black-border-subtle,
+  "white": $white-border-subtle,
+);
+
+////////////
+
+$theme-colors-text-dark: map-merge($theme-colors-text-dark, $extra-colors-text);
+$theme-colors-bg-subtle-dark: map-merge($theme-colors-bg-subtle-dark, $extra-colors-bg-subtle);
+$theme-colors-border-subtle-dark: map-merge($theme-colors-border-subtle-dark, $extra-colors-border-subtle);
+
+$theme-colors-text: map-merge($theme-colors-text, $extra-colors-text);
+$theme-colors-bg-subtle: map-merge($theme-colors-bg-subtle, $extra-colors-bg-subtle);
+$theme-colors-border-subtle: map-merge($theme-colors-border-subtle, $extra-colors-border-subtle);
+
+$theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "color": map-merge(
+      map-get($utilities, "color"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "color"), "values"),
+          (
+            $all-colors
+          ),
+        ),
+      ),
+    ),
+    "background-color": map-merge(
+      map-get($utilities, "background-color"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "background-color"), "values"),
+          (
+            $all-colors
+          ),
+        ),
+      ),
+    ),
+  )
+);
+
+// Layout & components
+@import "../bootstrap/scss/root";
+@import "../bootstrap/scss/reboot";
+@import "../bootstrap/scss/type";
+@import "../bootstrap/scss/images";
+@import "../bootstrap/scss/containers";
+@import "../bootstrap/scss/grid";
+@import "../bootstrap/scss/tables";
+@import "../bootstrap/scss/forms";
+@import "../bootstrap/scss/buttons";
+@import "../bootstrap/scss/transitions";
+@import "../bootstrap/scss/dropdown";
+@import "../bootstrap/scss/button-group";
+@import "../bootstrap/scss/nav";
+@import "../bootstrap/scss/navbar";
+@import "../bootstrap/scss/card";
+@import "../bootstrap/scss/accordion";
+@import "../bootstrap/scss/breadcrumb";
+@import "../bootstrap/scss/pagination";
+@import "../bootstrap/scss/badge";
+@import "../bootstrap/scss/alert";
+@import "../bootstrap/scss/progress";
+@import "../bootstrap/scss/list-group";
+@import "../bootstrap/scss/close";
+@import "../bootstrap/scss/toasts";
+@import "../bootstrap/scss/modal";
+@import "../bootstrap/scss/tooltip";
+@import "../bootstrap/scss/popover";
+@import "../bootstrap/scss/carousel";
+@import "../bootstrap/scss/spinners";
+@import "../bootstrap/scss/offcanvas";
+@import "../bootstrap/scss/placeholders";
+
+// 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
+@import "../bootstrap/scss/helpers";
+@import "../bootstrap/scss/utilities/api";
+
+body {
+    background-color: $black-950;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+footer {
+    min-height: min-content;
+    padding-top: 0.5rem;
+    padding-bottom: 1rem;
+    height: auto;
+}
+
+// Pre Formatting
+pre {
+    white-space: pre-wrap;
+    font-size: 1rem;
+}
+
+textarea {
+  font-family: $font-family-monospace;
+}
+
+.toast-container {
+  bottom: 10% !important;
+}
+
+// Half-rounded badges
+.badge {
+    font-weight: 550;
+    /* vertical-align: text-top; */
+}
+
+.badge-left {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    /* padding-right: 0.35rem; */
+}
+
+.badge-right {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    font-family: $font-family-monospace;
+    /* letter-spacing: 0.03rem; */
+}
+
+.render-half-badge {
+    min-width: 8em;
+    display: flex;
+    align-items: center;
+}
+
+// Generate alert modifier classes
+// @each $color, $value in $theme-colors {
+//   .alert-#{$color} {
+//     @include alert-variant(theme-color-level($color, -10), theme-color-level($color, -9), theme-color-level($color, 6));
+//   }
+// }
+//
+// // Generate `.bg-*` color utilities
+// @each $color, $value in $theme-colors {
+//   @include bg-variant('.bg-#{$color}', $value);
+// }
+
+// --------------------------------
