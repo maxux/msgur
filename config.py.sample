@@ -1,16 +1,18 @@
-class Database:
-    # mariadb credentials
-    hostname = ""
-    socket = ""
-    username = ""
-    password = ""
-    database = "msgur"
+from modules.database import engines
 
 class Config:
-    db = Database()
+    # db = engines.MariaDB(
+    #     hostname="127.0.0.1",
+    #     username="demo",
+    #     password="demo",
+    #     database="msgur"
+    # )
 
-    # Enable Jinja auto reload
-    debug = True
+    db = engines.SQLite("db/demo.sqlite")
+
+    # Enable debugging output and templates
+    # autoreload features
+    debug = False
 
     # Fetch repository git revision to show it
     # on runtine on page's footer
