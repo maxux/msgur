@@ -1,13 +1,11 @@
-import os
-import sys
 import time
-import datetime
 import uuid
 import json
 import hashlib
 import MySQLdb
 import MySQLdb.cursors
 from config import Config as config
+from modules.repository import Repository
 from datetime import datetime
 from flask import Flask, request, jsonify, render_template, abort, g
 
@@ -19,13 +17,13 @@ class MsgURWebServer:
         self.app.url_map.strict_slashes = False
 
         if self.config.debug:
+            print("[+] debug instance enabled")
             self.app.config['TEMPLATES_AUTO_RELOAD'] = True
 
-        self.gitrev = None
-
-        if config.revision:
-            self.gitrev = self.repository_revision()
-            print(f"[+] repository revision: {self.gitrev}")
+        self.repository = Repository(self.config.gitinfo)
+        if self.repository.revision:
+            print(f"[+] repository revision: {self.repository.revision}")
+            print(f"[+] repository committed: {self.repository.created}")
 
     def database(self):
         db = MySQLdb.connect(
@@ -40,29 +38,6 @@ class MsgURWebServer:
 
         return db
 
-    def repository_sha(self):
-        with open(".git/HEAD", "r") as f:
-            head = f.read()
-            if not head.startswith("ref:"):
-                return None
-
-            ref = head[5:].strip()
-
-        with open(f".git/{ref}", "r") as f:
-            sha = f.read()
-            return sha[:12]
-
-        return None
-
-    def repository_revision(self):
-        try:
-            self.gitrev = self.repository_sha()
-            return self.gitrev
-
-        except Exception as e:
-            print(e)
-            return None
-
     def identifier_generate(self):
         uid = uuid.uuid4().bytes
 
@@ -75,10 +50,10 @@ class MsgURWebServer:
 
     def routes(self):
         @self.app.context_processor
-        def inject_now():
+        def inject_context():
             return {
                 "now": datetime.utcnow(),
-                "revision": self.gitrev,
+                "git": self.repository,
             }
 
         @self.app.before_request

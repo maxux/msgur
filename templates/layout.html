@@ -44,9 +44,24 @@
         <a href="/" class="stretched-link"></a>
       </div>
 
-      <div class="render-half-badge fs-6x position-relative">
-        <span class="badge badge-left bg-pink-800">Revision</span>
-        <span class="badge badge-right bg-grayx-700">{{ revision or "(unknown)" }}</span>
+      <div class="fs-6x position-relative">
+        {% if git.enabled %}
+        <div class="render-half-badge justify-content-center mb-1">
+          <span class="badge badge-left bg-pink-800">Revision</span>
+          <span class="badge badge-right bg-grayx-700">{{ git.revision or "(missing)" }}</span>
+        </div>
+        {% if git.created %}
+        <div class="render-half-badge justify-content-center">
+          <span class="badge badge-left bg-pink-800">Released</span>
+          <span class="badge badge-right bg-grayx-700">{{ git.created.strftime("%a. %d %b. %Y") }}</span>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="render-half-badge justify-content-center">
+          <span class="badge badge-left bg-pink-800">Source</span>
+          <span class="badge badge-right bg-grayx-700">maxux/msgur</span>
+        </div>
+        {% endif %}
         <a href="https://github.com/maxux/msgur" target="_blank" class="stretched-link"></a>
       </div>
     </div>
