@@ -50,11 +50,11 @@ uwsgi uwsgi.sample.ini
 ```sql
 -- MariaDB / MySQL Table Structure
 CREATE TABLE messages (
-  id varchar(12) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL,
-  ciphertext text CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
-  created timestamp NOT NULL DEFAULT current_timestamp(),
-  seen timestamp NULL DEFAULT NULL,
-  iv varchar(24) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL
+    id varchar(12) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL,
+    ciphertext text CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
+    created timestamp NOT NULL DEFAULT current_timestamp(),
+    seen timestamp NULL DEFAULT NULL,
+    iv varchar(24) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 

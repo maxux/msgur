@@ -27,11 +27,11 @@ engines = Engines
 class _mariadb:
     """
     CREATE TABLE messages (
-      id VARCHAR(12) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL,
-      ciphertext TEXT CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
-      created TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-      seen TIMESTAMP NULL DEFAULT NULL,
-      iv VARCHAR(24) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL
+        id VARCHAR(12) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL,
+        ciphertext TEXT CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
+        created TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+        seen TIMESTAMP NULL DEFAULT NULL,
+        iv VARCHAR(24) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL
 
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
