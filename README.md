@@ -28,20 +28,21 @@ This documents will receive some updates the next few days related to implementa
 # Setup
 
 1. Install dependencies
-```sh
+```bash
 pip install -r requirements.txt
 ```
 
 2. Create an empty configuration
-```
+```bash
 cp config.py.sample config.py
 ```
 
-3. Customize your configuration, set your database backend settings and optional features.
-Supported database engines: `MySQL/MariaDB` and `SQLite3`.
+3. Customize your configuration, set your database backend settings and optional features. Supported database engines:
+ - MySQL/MariaDB
+ - SQLite3
 
 4. Setup your WSGI Server, a sample configuration for uWSGI is provided
-```
+```bash
 uwsgi uwsgi.sample.ini
 ```
 
