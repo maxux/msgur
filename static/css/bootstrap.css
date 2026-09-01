@@ -14208,6 +14208,14 @@ textarea {
   font-family: "UbuntuSansMono", monospace;
 }
 
+textarea#message {
+  min-height: 40vh;
+}
+
+textarea#message::placeholder {
+  color: #495057;
+}
+
 .toast-container {
   bottom: 10% !important;
 }
