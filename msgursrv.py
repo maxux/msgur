@@ -41,12 +41,11 @@ class MsgURWebServer:
     def identifier_generate(self):
         uid = uuid.uuid4().bytes
 
-        h = hashlib.blake2b(digest_size=6)
-        h.update(uid)
-        digest = h.digest()
+        ctx = hashlib.blake2b(digest_size=6)
+        ctx.update(uid)
+        digest = ctx.digest()
 
         return digest.hex()
-
 
     def routes(self):
         @self.app.context_processor
