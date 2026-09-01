@@ -1,14 +1,21 @@
 from modules.database import engines
 
 class Config:
-    # db = engines.MariaDB(
-    #     hostname="127.0.0.1",
-    #     username="demo",
-    #     password="demo",
-    #     database="msgur"
-    # )
+    # Mariadb: 'hostname' and 'socket' (unix socket) are mutually exclusive,
+    # set an empty string on the one not used (by default, socket is empty)
+    db = engines.MariaDB(
+        hostname="127.0.0.1",
+        socket="",
+        username="demo",
+        password="demo",
+        database="msgur"
+    )
 
+    # SQLite: simple database file
     db = engines.SQLite("db/demo.sqlite")
+
+    # Note: only one 'db' can be set at a time.
+
 
     # Enable debugging output and templates
     # autoreload features
