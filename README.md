@@ -25,10 +25,30 @@ When a request to the message is made, the message is deleted from the database,
 
 This documents will receive some updates the next few days related to implementation changes.
 
+# Setup
+
+1. Install dependencies
+```sh
+pip install -r requirements.txt
+```
+
+2. Create an empty configuration
+```
+cp config.py.sample config.py
+```
+
+3. Customize your configuration, set your database backend settings and optional features.
+Supported database engines: `MySQL/MariaDB` and `SQLite3`.
+
+4. Setup your WSGI Server, a sample configuration for uWSGI is provided
+```
+uwsgi uwsgi.sample.ini
+```
+
 # Database Schema
 
 ```sql
--- Table Structure
+-- MariaDB / MySQL Table Structure
 CREATE TABLE messages (
   id varchar(12) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL,
   ciphertext text CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
@@ -40,4 +60,18 @@ CREATE TABLE messages (
 
 -- Indexes
 ALTER TABLE messages ADD PRIMARY KEY (id), ADD KEY seen (seen);
+```
+
+```sql
+-- SQLite Table Structure
+CREATE TABLE messages (
+    id varchar(12) primary key,
+    ciphertext text default null,
+    created timestamp default current_timestamp,
+    seen timestamp default null,
+    iv varchar(24)
+);
+
+-- Index
+CREATE INDEX seen ON messages (seen);
 ```
