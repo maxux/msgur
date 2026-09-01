@@ -2,10 +2,9 @@ import time
 import uuid
 import json
 import hashlib
-import MySQLdb
-import MySQLdb.cursors
 from config import Config as config
 from modules.repository import Repository
+from modules.database import Database
 from datetime import datetime
 from flask import Flask, request, jsonify, render_template, abort, g
 
@@ -25,18 +24,7 @@ class MsgURWebServer:
             print(f"[+] repository revision: {self.repository.revision}")
             print(f"[+] repository committed: {self.repository.created}")
 
-    def database(self):
-        db = MySQLdb.connect(
-            host=config.db.hostname,
-            unix_socket=config.db.socket,
-            user=config.db.username,
-            password=config.db.password,
-            database=config.db.database,
-            autocommit=True,
-            cursorclass=MySQLdb.cursors.DictCursor
-        )
-
-        return db
+        self.database = Database(self.config.db)
 
     def identifier_generate(self):
         uid = uuid.uuid4().bytes
@@ -61,7 +49,7 @@ class MsgURWebServer:
             if request.path.startswith("/static"):
                 return None
 
-            g.db = self.database()
+            g.db = self.database.instance()
             return None
 
         @self.app.after_request
@@ -78,48 +66,22 @@ class MsgURWebServer:
 
         @self.app.get('/api/fetch/<id>')
         def fetch(id):
-            cursor = g.db.cursor()
-            cursor.execute("""
-               SELECT ciphertext, UNIX_TIMESTAMP(created) created, iv
-                FROM messages WHERE id = %(id)s
-                  AND seen IS NULL
-
-            """, {"id": id})
-
-            row = cursor.fetchone()
-            if row is None:
+            data = g.db.fetch(id)
+            if data is None:
                 abort(404)
 
-            cursor.execute("""
-                UPDATE messages SET ciphertext = NULL, seen = CURRENT_TIMESTAMP
-                WHERE id = %(id)s
-                AND seen IS NULL
-
-            """, {"id": id})
-
-            # FIXME
-            # cursor.execute("DELETE FROM messages WHERE id = %(id)s", {"id": id})
-
-            return jsonify(row)
+            return jsonify(data)
 
         @self.app.post('/api/create')
         def create():
-            cursor = g.db.cursor()
             payload = request.json
 
-            data = {
-                "id": self.identifier_generate(),
-                "data": payload.get("message"),
-                "iv": payload.get("iv")
-            }
+            id = self.identifier_generate()
+            data = payload.get("message")
+            iv = payload.get("iv")
 
-            cursor.execute("""
-                INSERT INTO messages (id, ciphertext, iv)
-                VALUES (%(id)s, %(data)s, %(iv)s)
-
-            """, data)
-
-            return jsonify({"id": data["id"]})
+            info = g.db.create(id, data, iv)
+            return jsonify(info)
 
         #
         # Static Templates
