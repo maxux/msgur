@@ -267,13 +267,22 @@ class SecureMessenger {
     //
     //
     initialize_editor() {
-        document.getElementById("message").focus();
+        const sendbtn = document.getElementById("encrypt-and-send");
+        if(!sendbtn) {
+            // No message form available
+            return;
+        }
 
-        document.getElementById("encrypt-and-send").addEventListener("click", (event) => {
+        function send_reset() {
+            sendbtn.disabled = false;
+            sendbtn.innerText = "Encrypt and Send";
+        }
+
+        sendbtn.addEventListener("click", (event) => {
             this.reset_error_success_message();
 
-            event.srcElement.disabled = true;
-            event.srcElement.innerText = "Saving, please wait";
+            sendbtn.disabled = true;
+            sendbtn.innerText = "Saving, please wait";
 
             this.event_request_encrypt(event).then(
                 (x) => {
@@ -284,12 +293,25 @@ class SecureMessenger {
                     }
                 },
                 (a) => {
-                    event.target.disabled = false;
-                    event.target.innerText = "Encrypt and Send";
+                    send_reset();
                     this.show_error_message(a);
                 }
             );
+        });
 
+        document.getElementById("message").focus();
+
+        document.getElementById("new-message").addEventListener("click", (event) => {
+            event.stopPropagation();
+            event.preventDefault();
+
+            this.reset_error_success_message();
+            send_reset();
+            document.getElementById("create-info").classList.add("d-none");
+            document.getElementById("creator").classList.remove("d-none");
+            document.getElementById("upload-ok").classList.add("d-none");
+            document.getElementById("message").value = "";
+            document.getElementById("message").focus();
         });
 
         document.getElementById("copy-btn").addEventListener("click", (event) => {
